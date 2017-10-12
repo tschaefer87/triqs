@@ -56,7 +56,7 @@ include(CheckIncludeFileCXX)
 
 message( STATUS "-------- Checking compiler C++ status-------------")
 
-try_compile(_cxx_ok ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/cmake/cxx_check.cpp COMPILE_DEFINITIONS  -std=c++14)
+try_compile(_cxx_ok ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/cmake/cxx_check.cpp COMPILE_DEFINITIONS  -std=c++17)
 if (NOT _cxx_ok)
  MESSAGE(FATAL_ERROR "The compiler does not support C++14")
 endif()
@@ -145,7 +145,7 @@ endif()
 # It should not exported or an application could not e.g. upgrade to c++17
 # -----------------------------------------------------------------------------
 
-add_compile_options(-std=c++14) 
+add_compile_options(-std=c++17) 
 
 #------------------------
 # Build google test

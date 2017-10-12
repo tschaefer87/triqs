@@ -140,7 +140,7 @@ endif()
 
 # should be move to config.h ?
 
-try_compile(has_optional_header ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/cmake/has_optional.cpp COMPILE_DEFINITIONS  -std=c++14 )
+try_compile(has_optional_header ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/cmake/has_optional.cpp COMPILE_DEFINITIONS  -std=c++17 )
 if (NOT has_optional_header)
  message(STATUS "Using <experimental/optional> header instead of <optional>")
 else ()
