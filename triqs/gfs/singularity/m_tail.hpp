@@ -93,21 +93,21 @@ namespace gfs {
  
  
  
- template <typename Ta> struct gf_singularity<cartesian_product<brillouin_zone, imfreq>, Ta> {
-  using type = m_tail<brillouin_zone, Ta>;
- };
+ //template <typename Ta> struct gf_singularity<cartesian_product<brillouin_zone, imfreq>, Ta> {
+  //using type = m_tail<brillouin_zone, Ta>;
+ //};
 
- template <typename Ta> struct gf_singularity<cartesian_product<cyclic_lattice, imfreq>, Ta> {
-  using type = m_tail<cyclic_lattice, Ta>;
- };
+ //template <typename Ta> struct gf_singularity<cartesian_product<cyclic_lattice, imfreq>, Ta> {
+  //using type = m_tail<cyclic_lattice, Ta>;
+ //};
 
- template <typename Ta> struct gf_singularity<cartesian_product<brillouin_zone, imtime>, Ta> {
-  using type = m_tail<brillouin_zone, Ta>;
- };
+ //template <typename Ta> struct gf_singularity<cartesian_product<brillouin_zone, imtime>, Ta> {
+  //using type = m_tail<brillouin_zone, Ta>;
+ //};
 
- template <typename Ta> struct gf_singularity<cartesian_product<cyclic_lattice, imtime>, Ta> {
-  using type = m_tail<cyclic_lattice, Ta>;
- };
+ //template <typename Ta> struct gf_singularity<cartesian_product<cyclic_lattice, imtime>, Ta> {
+  //using type = m_tail<cyclic_lattice, Ta>;
+ //};
 
 
  template <typename V, typename Ta> struct gf_singularity_factory<m_tail<V, Ta>> {
