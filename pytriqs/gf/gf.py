@@ -332,12 +332,12 @@ class Gf(object):
             return self.data[key.linear_index]
 
         # If all arguments are MeshPoint, we are slicing the mesh or evaluating
-        if all(isinstance(x, MeshPoint) for x in key):
+        if all(isinstance(x, (MeshPoint, Idx)) for x in key):
             assert len(key) == self.rank, "wrong number of arguments in [ ]. Expected %s, got %s"%(self.rank, len(key))
-            return self.data[tuple(x.linear_index for x in key)]
+            return self.data[tuple(x.linear_index if isinstance(x, MeshPoint) else m.index_to_linear(x.idx) for x,m in itertools.izip(key,self._mesh._mlist))]
 
         # If any argument is a MeshPoint, we are slicing the mesh or evaluating
-        elif any(isinstance(x, MeshPoint, Idx) for x in key):
+        elif any(isinstance(x, (MeshPoint, Idx)) for x in key):
             assert len(key) == self.rank, "wrong number of arguments in [[ ]]. Expected %s, got %s"%(self.rank, len(key))
             assert self.rank > 1, "Internal error : impossible case" # here all == any for one argument
             mlist = self._mesh._mlist 
