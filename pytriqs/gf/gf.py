@@ -68,8 +68,8 @@ class AddMethod(type):
             setattr(cls, a.__name__, add_method_helper(a,cls)) 
 
 class Idx:
-    def __init__(self, x):
-        self.idx = x
+    def __init__(self, *x):
+        self.idx = x[0] if len(x)==1 else x
 
 class Gf(object):
     __metaclass__ = AddMethod
@@ -339,15 +339,16 @@ class Gf(object):
         # If any argument is a MeshPoint, we are slicing the mesh or evaluating
         elif any(isinstance(x, (MeshPoint, Idx)) for x in key):
             assert len(key) == self.rank, "wrong number of arguments in [[ ]]. Expected %s, got %s"%(self.rank, len(key))
+            assert all(isinstance(x, (MeshPoint, Idx, slice)) for x in key), "Invalid accessor of Green function, please combine only MeshPoints, Idx and slice"
             assert self.rank > 1, "Internal error : impossible case" # here all == any for one argument
             mlist = self._mesh._mlist 
             for x in key:
                 if isinstance(x, slice) and x != self._full_slice: raise NotImplementedError, "Partial slice of the mesh not implemented" 
             # slice the data 
-            k = [x.linear_index if isinstance(x, MeshPoint) else x.idx for x in key] + self._target_rank * [slice(0, None)]
+            k = [x.linear_index if isinstance(x, MeshPoint) else m.index_to_linear(x.idx) if isinstance(x, Idx) else x for x,m in itertools.izip(key,mlist)] + self._target_rank * [slice(0, None)]
             dat = self._data[k]
             # list of the remaining lists
-            mlist = [m for i,m in itertools.ifilter(lambda tup_im : not isinstance(tup_im[0], MeshPoint), itertools.izip(key, mlist))]
+            mlist = [m for i,m in itertools.ifilter(lambda tup_im : not isinstance(tup_im[0], (MeshPoint, Idx)), itertools.izip(key, mlist))]
             assert len(mlist) > 0, "Internal error" 
             mesh = MeshProduct(*mlist) if len(mlist)>1 else mlist[0]
             sing = None # FIXME : slice the singularity, in one case
@@ -374,6 +375,11 @@ class Gf(object):
             r = Gf(mesh = self._mesh, data = dat, singularity = sing, indices = ind)
             r.__check_invariants()
             return r
+
+        # All other cases are an invalid combination
+        else:
+            raise RuntimeError, "Invalid accessor of Green function"
+
 
     def __setitem__(self, key, val):
 
