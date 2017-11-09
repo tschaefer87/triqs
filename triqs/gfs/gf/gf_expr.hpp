@@ -59,8 +59,8 @@ namespace gfs {
   // NB : could be unified to one combine<F>, where F is a functor, but an easy usage requires polymorphic lambda ...
   struct combine_shape {
    template <typename L, typename R> auto operator()(L &&l, R &&r) const {
-    if (!(l.data_shape() == r.data_shape()))
-     TRIQS_RUNTIME_ERROR << "Shape mismatch in Green Function Expression: " << l.data_shape() << " vs " << r.data_shape();
+    //if (!(l.data_shape() == r.data_shape()))
+    // TRIQS_RUNTIME_ERROR << "Shape mismatch in Green Function Expression: " << l.data_shape() << " vs " << r.data_shape();
     return l.data_shape();
    }
    template <typename S, typename R> decltype(auto) operator()(scalar_wrap<S> const &, R &&r) const { return r.data_shape(); }
