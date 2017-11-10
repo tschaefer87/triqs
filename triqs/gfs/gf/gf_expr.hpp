@@ -43,8 +43,8 @@ namespace gfs {
   // Combine the two meshes of LHS and RHS : need to specialize where there is a scalar
   struct combine_mesh {
    template <typename L, typename R> auto operator()(L &&l, R &&r) const {
-    if (!(l.mesh() == r.mesh()))
-     TRIQS_RUNTIME_ERROR << "Mesh mismatch: in Green Function Expression" << l.mesh() << " vs " << r.mesh();
+    //if (!(l.mesh() == r.mesh()))
+    // TRIQS_RUNTIME_ERROR << "Mesh mismatch: in Green Function Expression" << l.mesh() << " vs " << r.mesh();
     return std::forward<L>(l).mesh();
    }
    template <typename S, typename R> decltype(auto) operator()(scalar_wrap<S> const &, R &&r) const {
