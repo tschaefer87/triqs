@@ -191,6 +191,9 @@ class Gf(object):
             if self._singularity is None and self._target_rank ==2 and isinstance(self._mesh, (meshes.MeshImFreq, meshes.MeshReFreq, meshes.MeshImTime, meshes.MeshReTime)):
                 self._singularity = singularities.TailGf(*self._target_shape)
                 self._singularity.reset(-2)
+            if self._singularity is None and self._target_rank ==0 and isinstance(self._mesh, (meshes.MeshImFreq, meshes.MeshReFreq, meshes.MeshImTime, meshes.MeshReTime)):
+                self._singularity = singularities.TailGf_s(self._target_shape)
+                self._singularity.reset(-2)
 
             # NB : at this stage, enough checks should have been made in Python in order for the C++ view 
             # to be constructed without any INTERNAL exceptions.
@@ -366,12 +369,14 @@ class Gf(object):
             if all(isinstance(x, slice) for x in key) : 
                 key_s, key = list(key), [ x.start for x in key]
             else:
-                key_s = map(lambda r: slice(r,r+1,1), key) # transform int into slice 
+                # key_s = map(lambda r: slice(r,r+1,1), key) # transform int into slice 
+                key_s = list(key)
             # now the key is a list of slices
             dat = self._data[ self._rank * [slice(0,None)] + key_s ] 
             ind = GfIndices([ v[k]  for k,v in zip(key_s, self._indices.data)])
             sing = singularities._make_tail_view_from_data(self._singularity.data[[slice(0,None)] + key_s]) if self._singularity else None # Build a new view of the singularity
-            r = Gf(mesh = self._mesh, data = dat, singularity = sing, indices = ind)
+            # r = Gf(mesh = self._mesh, data = dat, singularity = sing, indices = ind)
+            r = Gf(mesh = self._mesh, data = dat, singularity = sing)
             r.__check_invariants()
             return r
 
