@@ -192,6 +192,9 @@ class Gf(object):
             if self._singularity is None and self._target_rank ==2 and isinstance(self._mesh, (meshes.MeshImFreq, meshes.MeshReFreq, meshes.MeshImTime, meshes.MeshReTime)):
                 self._singularity = singularities.TailGf(*self._target_shape)
                 self._singularity.reset(-2)
+            if self._singularity is None and self._target_rank ==0 and isinstance(self._mesh, (meshes.MeshImFreq, meshes.MeshReFreq, meshes.MeshImTime, meshes.MeshReTime)):
+                self._singularity = singularities.TailGf_s(self._target_shape)
+                self._singularity.reset(-2)
 
             # NB : at this stage, enough checks should have been made in Python in order for the C++ view 
             # to be constructed without any INTERNAL exceptions.
