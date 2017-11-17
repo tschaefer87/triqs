@@ -89,6 +89,8 @@ m.add_function(name = "make_gf_from_inverse_fourier", signature="gf_view<retime,
 # make_real_in_tau
 m.add_function("gf_view<imfreq, matrix_valued> make_real_in_tau(gf_view<imfreq, matrix_valued> g)",
                doc = "Ensures that the Fourier transform of the Gf, in tau, is real, hence G(-i \omega_n)* =G(i \omega_n)")
+m.add_function("gf_view<imfreq, scalar_valued> make_real_in_tau(gf_view<imfreq, scalar_valued> g)",
+               doc = "Ensures that the Fourier transform of the Gf, in tau, is real, hence G(-i \omega_n)* =G(i \omega_n)")
 
 # fit_tail
 m.add_function("void fit_tail(gf_view<imfreq, matrix_valued> g, tail_view known_moments, int max_moment, int n_min, int n_max, bool replace_by_fit = true)", 

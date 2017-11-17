@@ -362,18 +362,20 @@ class Gf(object):
         # In all other cases, we are slicing the target space
         else : 
             assert self.target_rank == len(key), "wrong number of arguments. Expected %s, got %s"%(self.target_rank, len(key))
-            # transform the key in a list of slices
+            # String access: transform the key into a list integers
             if all(isinstance(x, str) for x in key):
                 assert self._indices, "Got string indices, but I have no indices to convert them !"
-                key_s = [self._indices.convert_index (s,i) for i,s in enumerate(key)] # convert returns a slice of len 1
+                key_s = [self._indices.convert_index(s,i) for i,s in enumerate(key)] # convert returns a slice of len 1
                 key = [x.start for x in key_s]
+
             if all(isinstance(x, slice) for x in key) : 
                 key_s, key = list(key), [ x.start for x in key]
+                ind = GfIndices([ v[k]  for k,v in zip(key_s, self._indices.data)])
             else:
-                key_s = map(lambda r: slice(r,r+1,1), key) # transform int into slice 
-            # now the key is a list of slices
+                key_s = list(key)
+                ind = GfIndices([])
+
             dat = self._data[ self._rank * [slice(0,None)] + key_s ] 
-            ind = GfIndices([ v[k]  for k,v in zip(key_s, self._indices.data)])
             sing = singularities._make_tail_view_from_data(self._singularity.data[[slice(0,None)] + key_s]) if self._singularity else None # Build a new view of the singularity
             r = Gf(mesh = self._mesh, data = dat, singularity = sing, indices = ind)
             r.__check_invariants()

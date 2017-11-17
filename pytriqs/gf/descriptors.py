@@ -35,11 +35,11 @@ class OneFermionInTime(Base):
         if G.mesh.TypeGF not in [GF_Type.Imaginary_Time]: 
             raise TypeError, "This initializer is only correct in frequency"
 
-        Id = numpy.identity(G.target_shape[0])
+        Id = 1. if len(G.target_shape) == 0 else numpy.identity(G.target_shape[0])
         G.singularity.reset(4)
-        G.singularity[1][:,:] = 1*Id
-        G.singularity[2][:,:] = L*Id
-        G.singularity[3][:,:] = L*L*Id
+        G.singularity[1] = 1*Id
+        G.singularity[2] = L*Id
+        G.singularity[3] = L*L*Id
         #G.singularity.mask.fill(3)
         
         fact = -1/(1+exp(-L*G.beta))
@@ -85,7 +85,7 @@ semicircular density of states"""
 
     def __call__(self,G):
         D = self.half_bandwidth
-        Id = numpy.identity(G.target_shape[0],numpy.complex_)
+        Id = complex(1,0) if len(G.target_shape) == 0 else numpy.identity(G.target_shape[0],numpy.complex_)
         if type(G.mesh) == MeshImFreq:
             f = lambda om: (om  - 1j*copysign(1,om.imag)*sqrt(abs(om)**2 +  D*D))/D/D*2*Id
         elif type(G.mesh) == MeshReFreq:
@@ -99,11 +99,11 @@ semicircular density of states"""
             raise TypeError, "This initializer is only correct in frequency"
 
         # Let's create a new tail
-        Id = numpy.identity(G.target_shape[0])
+        Id = 1. if len(G.target_shape) == 0 else numpy.identity(G.target_shape[0])
         G.singularity.reset(7)
-        G.singularity[1][:,:] = 1.0*Id
-        G.singularity[3][:,:] = D**2/4.0*Id
-        G.singularity[5][:,:] = D**4/8.0*Id
+        G.singularity[1] = 1.0*Id
+        G.singularity[3] = D**2/4.0*Id
+        G.singularity[5] = D**4/8.0*Id
         #G.singularity.mask.fill(6)
  
         Function(f,None)(G)
@@ -144,11 +144,11 @@ class Flat (Base):
             raise TypeError, "This initializer is only correct in frequency"
 
         # Let's create a new tail
-        Id = numpy.identity(G.target_shape[0])
+        Id = 1. if len(G.target_shape) == 0 else numpy.identity(G.target_shape[0])
         G.singularity.reset(7)
-        G.singularity[1][:,:] = 1.0*Id
-        G.singularity[3][:,:] = D**2/3.0*Id
-        G.singularity[5][:,:] = D**4/5.0*Id
+        G.singularity[1] = 1.0*Id
+        G.singularity[3] = D**2/3.0*Id
+        G.singularity[5] = D**4/5.0*Id
         #G.singularity.mask.fill(6)
 
         # Silence "RuntimeWarning: divide by zero encountered in divide"
