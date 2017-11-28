@@ -588,8 +588,13 @@ class Gf(object):
    #----------------------------- other operations -----------------------------------
 
     def invert(self):
+        if self.target_rank==0:
+            self.data[:] = 1. / self.data
+            if self._singularity : self._singularity.invert()
+            return
+
         """Inverts this Gf in place, in a matrix sense"""
-        assert self.target_rank==2, "Inversion only makes sense for matrix valued Gf"
+        assert self.target_rank==2, "Inversion only makes sense for matrix or scalar_valued Gf"
         d = self.data.view() # Cf https://docs.scipy.org/doc/numpy/reference/generated/numpy.reshape.html
         d.shape = (np.prod(d.shape[:-2]),) + d.shape[-2:] # reshaped view, guarantee no copy
         wrapped_aux._gf_invert_data_in_place(d)   
