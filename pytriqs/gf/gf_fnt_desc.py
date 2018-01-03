@@ -28,6 +28,10 @@ m.add_function("matrix<dcomplex> density(gf_view<legendre, matrix_valued> g)", d
 m.add_function("void enforce_discontinuity(gf_view<legendre, matrix_valued> gl, matrix_view<double> disc)", doc = """Modify the coefficient to adjust discontinuity""")
 
 # set_from_fourier
+m.add_function("void set_from_fourier(gf_view<imfreq, tensor_valued<4>> gw, gf_view<imtime, tensor_valued<4>> gt)",
+               calling_pattern = "gw = fourier(gt)",
+               doc = """Fills self with the Fourier transform of gt""")
+
 m.add_function("void set_from_fourier(gf_view<imfreq, matrix_valued> gw, gf_view<imtime, matrix_valued> gt)",
                calling_pattern = "gw = fourier(gt)",
                doc = """Fills self with the Fourier transform of gt""")
@@ -41,6 +45,10 @@ m.add_function("void set_from_fourier(gf_view<brillouin_zone, matrix_valued> gk,
                doc = """Fills self with the Fourier transform of gr""")
 
 # set_from_inverse_fourier
+m.add_function("void set_from_inverse_fourier(gf_view<imtime, tensor_valued<4>> gt, gf_view<imfreq, tensor_valued<4>> gw)",
+               calling_pattern = "gt = inverse_fourier(gw)",
+               doc = """Fills self with the Inverse Fourier transform of gw""")
+
 m.add_function("void set_from_inverse_fourier(gf_view<imtime, matrix_valued> gt, gf_view<imfreq, matrix_valued> gw)",
                calling_pattern = "gt = inverse_fourier(gw)",
                doc = """Fills self with the Inverse Fourier transform of gw""")

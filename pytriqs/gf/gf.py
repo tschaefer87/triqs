@@ -331,8 +331,8 @@ class Gf(object):
 
         # Only one argument. Must be a mesh point
         if not isinstance(key, tuple):
-            assert isinstance(key, MeshPoint)
-            return self.data[key.linear_index]
+            assert isinstance(key, (MeshPoint, Idx))
+            return self.data[key.linear_index if isinstance(key, MeshPoint) else self._mesh.index_to_linear(key.idx)]
 
         # If all arguments are MeshPoint, we are slicing the mesh or evaluating
         if all(isinstance(x, (MeshPoint, Idx)) for x in key):
@@ -371,9 +371,13 @@ class Gf(object):
             if all(isinstance(x, slice) for x in key) : 
                 key_s, key = list(key), [ x.start for x in key]
                 ind = GfIndices([ v[k]  for k,v in zip(key_s, self._indices.data)])
-            else:
+
+            if all(isinstance(x, int) for x in key)
                 key_s = list(key)
                 ind = GfIndices([])
+
+            else:
+                raise NotImplementedError, "Partial slice of the target space not implemented"
 
             dat = self._data[ self._rank * [slice(0,None)] + key_s ] 
             sing = singularities._make_tail_view_from_data(self._singularity.data[[slice(0,None)] + key_s]) if self._singularity else None # Build a new view of the singularity
