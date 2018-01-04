@@ -368,11 +368,11 @@ class Gf(object):
                 key_s = [self._indices.convert_index(s,i) for i,s in enumerate(key)] # convert returns a slice of len 1
                 key = [x.start for x in key_s]
 
-            if all(isinstance(x, slice) for x in key) : 
+            if all(isinstance(x, slice) for x in key): 
                 key_s, key = list(key), [ x.start for x in key]
                 ind = GfIndices([ v[k]  for k,v in zip(key_s, self._indices.data)])
 
-            if all(isinstance(x, int) for x in key)
+            if all(isinstance(x, int) for x in key):
                 key_s = list(key)
                 ind = GfIndices([])
 
